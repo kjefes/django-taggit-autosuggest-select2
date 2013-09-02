@@ -3,7 +3,7 @@ $(function () {
     var tagsAsString;
 
     function loadSelect2(allTags) {
-        $("#{{ widget_id }}").select2({
+        var settings = {
             tags: allTags,
             placeholder: '{{ start_text }}',
             minimumInputLength: 1,
@@ -59,7 +59,11 @@ $(function () {
                 }
             },
             tokenSeparators: [',', ]
-        });
+        };
+
+        $.extend(settings, {{ extra_settings|safe }});
+
+        $("#{{ widget_id }}").select2(settings);
     }
 
     $.get('{{ url }}', function (data) {

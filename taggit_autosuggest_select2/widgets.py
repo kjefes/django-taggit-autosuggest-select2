@@ -1,4 +1,5 @@
 import copy
+import json
 
 from django import forms
 from django.conf import settings
@@ -8,10 +9,11 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from taggit_autosuggest_select2.utils import edit_string_for_tags
+json_encode = json.JSONEncoder().encode
 
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_MAX_SUGGESTIONS', 20)
-
+EXTRA_SETTINGS = getattr(settings, 'TAGGIT_AUTOSUGGES_SELECT2_EXTRA_SETTINGS',{})
 
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
@@ -46,6 +48,7 @@ class TagAutoSuggest(forms.TextInput):
             'empty_text': empty_text,
             'limit_text': limit_text,
             'retrieve_limit': MAX_SUGGESTIONS,
+            'extra_settings': json_encode(EXTRA_SETTINGS),
         }
         js = render_to_string('taggable_input.html', context)
 
