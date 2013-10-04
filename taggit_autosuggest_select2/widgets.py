@@ -36,6 +36,7 @@ class TagAutoSuggest(forms.TextInput):
         empty_text = self.attrs.get('empty_text') or _("No Results")
         prompt_text = self.attrs.get('prompt_text') or _("Enter a tag")
         limit_text = self.attrs.get('limit_text') or _('No More Selections Are Allowed')
+        field_width = self.attrs.get('field_width')
 
         context = {
             'result_id': result_attrs['id'],
@@ -45,6 +46,7 @@ class TagAutoSuggest(forms.TextInput):
             'prompt_text': prompt_text,
             'empty_text': empty_text,
             'limit_text': limit_text,
+            'field_width': field_width,
             'retrieve_limit': MAX_SUGGESTIONS,
         }
         js = render_to_string('taggable_input.html', context)
