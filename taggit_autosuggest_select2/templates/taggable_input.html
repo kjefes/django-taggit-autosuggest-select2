@@ -72,7 +72,11 @@ $(function () {
 
     $('#{{ result_id }}').parents().find('form').submit(function (){
         var tagList = $("#{{ widget_id }}").select2('val');
-        tagsAsString = tagList.join(", ");
+        if(tagList.length == 1){
+           tagsAsString = '"'+tagList.join(", ")+'"';
+        }else{
+           tagsAsString = tagList.join(", ");
+        }
         $("#{{ result_id }}").val(tagsAsString);
         $("#{{ widget_id }}").val(tagsAsString);
     });
