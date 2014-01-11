@@ -17,6 +17,7 @@ EXTRA_SETTINGS = getattr(settings, 'TAGGIT_AUTOSUGGES_SELECT2_EXTRA_SETTINGS',{}
 
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
+    extra_settings = {}
 
     def render(self, name, value, attrs=None):
         if value is not None and not isinstance(value, basestring):
@@ -38,6 +39,8 @@ class TagAutoSuggest(forms.TextInput):
         empty_text = self.attrs.get('empty_text') or _("No Results")
         prompt_text = self.attrs.get('prompt_text') or _("Enter a tag")
         limit_text = self.attrs.get('limit_text') or _('No More Selections Are Allowed')
+
+        EXTRA_SETTINGS.update(self.extra_settings or {})
 
         context = {
             'result_id': result_attrs['id'],
