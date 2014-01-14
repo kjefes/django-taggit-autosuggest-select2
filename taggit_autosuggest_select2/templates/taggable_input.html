@@ -2,6 +2,12 @@
 $(function () {
     var tagsAsString;
 
+    // This function is used to strip quotes of 
+    // tags at form validation error.
+    function stripQuotes(str) {
+        return str.replace(/(^")|("$)/g, '');
+    }
+
     function loadSelect2(allTags) {
         var settings = {
             tags: allTags,
@@ -12,7 +18,7 @@ $(function () {
                 var data = [];
                 var $input = $('#{{ result_id }}');
                 $($input.val().split(", ")).each(function () {
-                    data.push({id: this, text: this});
+                    data.push({id: stripQuotes(this), text: stripQuotes(this)});
                 });
                 callback(data);
             },
