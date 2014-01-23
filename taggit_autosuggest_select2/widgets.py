@@ -18,6 +18,7 @@ EXTRA_SETTINGS = getattr(settings, 'TAGGIT_AUTOSUGGES_SELECT2_EXTRA_SETTINGS',{}
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
     extra_settings = {}
+    url = reverse_lazy('taggit_autosuggest_select2-list-all')
 
     def render(self, name, value, attrs=None):
         if value is not None and not isinstance(value, basestring):
@@ -45,7 +46,7 @@ class TagAutoSuggest(forms.TextInput):
         context = {
             'result_id': result_attrs['id'],
             'widget_id': widget_attrs['id'],
-            'url': reverse('taggit_autosuggest_select2-list-all'),
+            'url': self.url,
             'start_text': start_text,
             'prompt_text': prompt_text,
             'empty_text': empty_text,
