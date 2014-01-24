@@ -2,8 +2,14 @@
 $(function () {
     var tagsAsString;
 
+    // This function is used to strip quotes of 
+    // tags at form validation error.
+    function stripQuotes(str) {
+        return str.replace(/(^")|("$)/g, '');
+    }
+
     function loadSelect2(allTags) {
-        $("#{{ widget_id }}").select2({
+        var settings = {
             tags: allTags,
             placeholder: '{{ start_text }}',
             width: '{{ field_width }}',
@@ -13,7 +19,7 @@ $(function () {
                 var data = [];
                 var $input = $('#{{ result_id }}');
                 $($input.val().split(", ")).each(function () {
-                    data.push({id: this, text: this});
+                    data.push({id: stripQuotes(this), text: stripQuotes(this)});
                 });
                 callback(data);
             },
@@ -60,7 +66,11 @@ $(function () {
                 }
             },
             tokenSeparators: [',', ]
-        });
+        };
+
+        $.extend(settings, {{ extra_settings|safe }});
+
+        $("#{{ widget_id }}").select2(settings);
     }
 
     $.get('{{ url }}', function (data) {
@@ -69,7 +79,11 @@ $(function () {
 
     $('#{{ result_id }}').parents().find('form').submit(function (){
         var tagList = $("#{{ widget_id }}").select2('val');
-        tagsAsString = tagList.join(", ");
+        if(tagList.length == 1){
+           tagsAsString = '"'+tagList.join(", ")+'"';
+        }else{
+           tagsAsString = tagList.join(", ");
+        }
         $("#{{ result_id }}").val(tagsAsString);
         $("#{{ widget_id }}").val(tagsAsString);
     });
