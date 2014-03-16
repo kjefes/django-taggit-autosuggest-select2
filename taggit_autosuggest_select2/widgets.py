@@ -42,7 +42,7 @@ class TagAutoSuggest(forms.TextInput):
         limit_text = self.attrs.get('limit_text') or _('No More Selections Are Allowed')
         field_width = self.attrs.get('field_width')
 
-        EXTRA_SETTINGS.update(self.extra_settings or {})
+        self.extra_settings.update(EXTRA_SETTINGS)
 
         context = {
             'result_id': result_attrs['id'],
@@ -54,7 +54,7 @@ class TagAutoSuggest(forms.TextInput):
             'limit_text': limit_text,
             'field_width': field_width,
             'retrieve_limit': MAX_SUGGESTIONS,
-            'extra_settings': json_encode(EXTRA_SETTINGS),
+            'extra_settings': json_encode(self.extra_settings),
         }
         js = render_to_string('taggable_input.html', context)
 
