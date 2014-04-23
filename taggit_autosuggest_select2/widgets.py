@@ -58,6 +58,9 @@ class TagAutoSuggest(forms.TextInput):
             '%sselect2/select2.css' % static_base_url)
         select2_js_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_JS_URL',
             '%sselect2/select2.min.js' % static_base_url)
-        lib_js_url = '%sjs/taggit_autosuggest_select2.js' % static_base_url
         css = {'all': (select2_css_url,)}
-        js = (lib_js_url, select2_js_url,)
+        js = [
+            "%sjs/jquery-prepare.js" % static_base_url,
+            select2_js_url, 
+            "%sjs/jquery-preserve.js" % static_base_url
+        ]
