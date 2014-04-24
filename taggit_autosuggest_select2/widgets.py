@@ -52,8 +52,15 @@ class TagAutoSuggest(forms.TextInput):
         return result_html + widget_html + mark_safe(js)
 
     class Media:
-        js_base_url = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL', '%s' % settings.STATIC_URL)
-        select2_css_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_CSS_URL','%scss/select2.css' % js_base_url)
-        select2_js_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_JS_URL','%sjs/select2.min.js' % js_base_url)
+        static_base_url = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL', 
+            '%staggit_autosuggest_select2/' % settings.STATIC_URL)
+        select2_css_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_CSS_URL',
+            '%sselect2/select2.css' % static_base_url)
+        select2_js_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_JS_URL',
+            '%sselect2/select2.min.js' % static_base_url)
         css = {'all': (select2_css_url,)}
-        js = (select2_js_url,)
+        js = [
+            "%sjs/jquery-prepare.js" % static_base_url,
+            select2_js_url, 
+            "%sjs/jquery-preserve.js" % static_base_url
+        ]
