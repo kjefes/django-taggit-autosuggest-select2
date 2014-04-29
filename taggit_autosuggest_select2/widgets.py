@@ -11,7 +11,7 @@ from taggit_autosuggest_select2.utils import edit_string_for_tags
 
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_MAX_SUGGESTIONS', 20)
-
+WIDTH = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_WIDTH', '40em')
 
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
@@ -38,6 +38,7 @@ class TagAutoSuggest(forms.TextInput):
         limit_text = self.attrs.get('limit_text') or _('No More Selections Are Allowed')
 
         context = {
+            'width': WIDTH,
             'result_id': result_attrs['id'],
             'widget_id': widget_attrs['id'],
             'url': reverse('taggit_autosuggest_select2-list-all'),

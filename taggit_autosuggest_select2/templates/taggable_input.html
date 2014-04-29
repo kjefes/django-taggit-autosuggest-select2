@@ -5,6 +5,7 @@
     
         function loadSelect2(allTags) {
             $("#{{ widget_id }}").select2({
+                width: '{{ width }}',
                 tags: allTags,
                 placeholder: '{{ start_text }}',
                 minimumInputLength: 3,
