@@ -1,6 +1,6 @@
 from django.conf import settings
-from django.http import HttpResponse
-from django.utils import simplejson as json
+from django.http import JsonResponse
+import json
 from taggit.models import Tag
 
 
@@ -24,10 +24,10 @@ def list_tags(request):
         values_list('name', flat=True)
     data = [{'name': n, 'value': n} for n in tag_name_qs[:limit]]
 
-    return HttpResponse(json.dumps(data), mimetype='application/json')
+    return JsonResponse(data, safe=False)
 
 
 def list_all_tags(request):
     """Returns all the tags in the database"""
     all_tags = Tag.objects.all().values_list('name', flat=True)
-    return HttpResponse(json.dumps(list(all_tags)), mimetype='application/json')
+    return JsonResponse(list(all_tags), safe=False)
