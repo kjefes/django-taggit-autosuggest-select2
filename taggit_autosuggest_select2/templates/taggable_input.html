@@ -1,80 +1,100 @@
 <script type="text/javascript">
-$(function () {
-    var tagsAsString;
+ var startSelect2 = function ($){
+   $(function(){
+     var tagsAsString;
 
-    function loadSelect2(allTags) {
-        var settings = {
-            tags: allTags,
-            placeholder: '{{ start_text }}',
-            minimumInputLength: 1,
-            initSelection: function (element, callback) {
-                // Loads the tags from the hidden input field
-                var data = [];
-                var $input = $('#{{ result_id }}');
-                $($input.val().split(", ")).each(function () {
-                    data.push({id: this, text: this});
-                });
-                callback(data);
-            },
-            formatInputTooShort: function (term, minLength) {
-                return "{{ prompt_text }}";
-            },
-            formatResult: function (object, container, query) {
-                // Returns the display of the result in the dropdown
-                if (object.name)
-                    return object.name;
-                else
-                    return object.text;
-            },
-            formatSelection: function (object, container) {
-                // Returns the display of the selected tag in the field
-                if (object.name)
-                    return object.name;
-                else
-                    return object.text;
-            },
-            createSearchChoice: function(term, data) {
-                // Creates a tag if it isn't selected already or doesn't exist
-                if (data.length !== 0) {
-                    var matched = $(data).filter(function() {
-                        var hasName = this.name !== undefined,
-                            tag = hasName ? this.name : this.text;
-                        tag = tag.toLowerCase()
-                        return tag.localeCompare(term.toLowerCase()) === 0;
-                    });
-                    if (matched.length === 0) {
-                        return {id: term, text: term};
-                    }
-                    else // return the first matched item
-                        return matched[0];
-                } // check to see whether the tag might be selected already
-                else {
-                    var selected = $('#{{ widget_id }}').select2('val');
-                    var matched = $(selected).filter(function () {
-                        var tag = this.toLowerCase()
-                        return tag.localeCompare(term.toLowerCase()) === 0;
-                    });
-                    if (matched.length === 0)
-                        return {id: term, text: term};
-                }
-            },
-            tokenSeparators: [',', ]
-        };
+     // This function is used to strip quotes of
+     // tags at form validation error.
+     function stripQuotes(str) {
+       return str.replace(/(^")|("$)/g, '');
+     }
 
-        $.extend(settings, {{ extra_settings|safe }});
+     function loadSelect2(allTags) {
+       var settings = {
+         tags: allTags,
+         placeholder: '{{ start_text }}',
+         width: '{{ field_width }}',
+         minimumInputLength: 1,
+         initSelection: function (element, callback) {
+           // Loads the tags from the hidden input field
+           var data = [];
+           var $input = $('#{{ result_id }}');
+           $($input.val().split(", ")).each(function () {
+             data.push({id: stripQuotes(this), text: stripQuotes(this)});
+           });
+           callback(data);
+         },
+         formatInputTooShort: function (term, minLength) {
+           return "{{ prompt_text }}";
+         },
+         formatResult: function (object, container, query) {
+           // Returns the display of the result in the dropdown
+           if (object.name)
+           return object.name;
+           else
+           return object.text;
+         },
+         formatSelection: function (object, container) {
+           // Returns the display of the selected tag in the field
+           if (object.name)
+           return object.name;
+           else
+           return object.text;
+         },
+         createSearchChoice: function(term, data) {
+           // Creates a tag if it isn't selected already or doesn't exist
+           if (data.length !== 0) {
+             var matched = $(data).filter(function() {
+               var hasName = this.name !== undefined,
+               tag = hasName ? this.name : this.text;
+               tag = tag.toLowerCase()
+               return tag.localeCompare(term.toLowerCase()) === 0;
+             });
+             if (matched.length === 0) {
+               return {id: term, text: term};
+             }
+             else // return the first matched item
+             return matched[0];
+           } // check to see whether the tag might be selected already
+           else {
+             var selected = $('#{{ widget_id }}').select2('val');
+             var matched = $(selected).filter(function () {
+               var tag = this.toLowerCase()
+               return tag.localeCompare(term.toLowerCase()) === 0;
+             });
+             if (matched.length === 0)
+             return {id: term, text: term};
+           }
+         },
+         tokenSeparators: [',', ]
+       };
 
-        $("#{{ widget_id }}").select2(settings);
-    }
+       $.extend(settings, {{ extra_settings|safe }});
 
-    $.get('{{ url }}', function (data) {
-        loadSelect2(data);
-    });
+       $("#{{ widget_id }}").select2(settings);
+     }
 
-    $('#{{ result_id }}').parents().find('form').submit(function (){
-        var tagList = $("#{{ widget_id }}").select2('val');
-        tagsAsString = tagList.join(", ");
-        $("#{{ result_id }}").val(tagsAsString);
-        $("#{{ widget_id }}").val(tagsAsString);
-    });
-});
+     $.get('{{ url }}', function (data) {
+       loadSelect2(data);
+     });
+
+     $('#{{ result_id }}').parents().find('form').submit(function (){
+       var tagList = $("#{{ widget_id }}").select2('val');
+       if(tagList.length == 1){
+         tagsAsString = '"'+tagList.join(", ")+'"';
+       }else{
+         tagsAsString = tagList.join(", ");
+       }
+       $("#{{ result_id }}").val(tagsAsString);
+       $("#{{ widget_id }}").val(tagsAsString);
+     });
+   });
+ };
+
+ if ( typeof define === "function" && define.amd ) {
+   require(["jquery"], function ($) { startSelect2($)} );
+ }else{
+   startSelect2($);
+ }
+
 </script>
