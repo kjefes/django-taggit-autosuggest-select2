@@ -16,6 +16,7 @@ This project is directly based on those projects:
     * http://code.drewwilson.com/entry/autosuggest-jquery-plugin
 
 ## Installation
+* If django-taggit isn't installed yet, add 'taggit' to your INSTALLED_APPS in your project settings
 * Add "taggit_autosuggest_select2" to your INSTALLED_APPS in your project settings
 * Run "python manage.py collectstatic" in your django site dir.
 * Add the following line to your project's urls.py file:
@@ -23,6 +24,9 @@ This project is directly based on those projects:
 
 
 ## Settings
+* `TAGGIT_AUTOSUGGEST_SELECT2_LOAD_SELECT2` (Defaults to True)
+    Set to False if you don't want the widget to load select2 libraries.
+    (useful if it is already loaded).
 * `TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL`
     Instead of collecting and serving the static files directly, you can
     also set this variable to your static base URL somewhere else.

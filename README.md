@@ -24,6 +24,9 @@ This project is directly based on those projects:
 
 
 ## Settings
+* `TAGGIT_AUTOSUGGEST_SELECT2_LOAD_SELECT2` (Defaults to True)
+    Set to False if you don't want the widget to load select2 libraries.
+    (useful if it is already loaded).
 * `TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL`
     Instead of collecting and serving the static files directly, you can
     also set this variable to your static base URL somewhere else.
