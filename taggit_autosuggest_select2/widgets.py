@@ -14,6 +14,7 @@ json_encode = json.JSONEncoder().encode
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_MAX_SUGGESTIONS', 20)
 EXTRA_SETTINGS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_EXTRA_SETTINGS',{})
+LOAD_SELECT2 = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_LOAD_SELECT2', True)
 
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
@@ -61,8 +62,9 @@ class TagAutoSuggest(forms.TextInput):
         return result_html + widget_html + mark_safe(js)
 
     class Media:
-        js_base_url = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL', '%s' % settings.STATIC_URL)
-        select2_css_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_CSS_URL','%scss/select2.css' % js_base_url)
-        select2_js_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_JS_URL','%sjs/select2.min.js' % js_base_url)
-        css = {'all': (select2_css_url,)}
-        js = (select2_js_url,)
+        if LOAD_SELECT2:
+            js_base_url = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL', '%s' % settings.STATIC_URL)
+            select2_css_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_CSS_URL','%scss/select2.css' % js_base_url)
+            select2_js_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_JS_URL','%sjs/select2.min.js' % js_base_url)
+            css = {'all': (select2_css_url,)}
+            js = (select2_js_url,)
