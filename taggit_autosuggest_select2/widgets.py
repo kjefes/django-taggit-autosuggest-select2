@@ -13,7 +13,7 @@ json_encode = json.JSONEncoder().encode
 
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_MAX_SUGGESTIONS', 20)
-EXTRA_SETTINGS = getattr(settings, 'TAGGIT_AUTOSUGGES_SELECT2_EXTRA_SETTINGS',{})
+EXTRA_SETTINGS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_EXTRA_SETTINGS',{})
 
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
