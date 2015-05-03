@@ -15,6 +15,7 @@ json_encode = json.JSONEncoder().encode
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_MAX_SUGGESTIONS', 20)
 EXTRA_SETTINGS = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_EXTRA_SETTINGS',{})
 LOAD_SELECT2 = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_LOAD_SELECT2', True)
+WIDTH = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_WIDTH', '60em')
 
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
@@ -41,7 +42,9 @@ class TagAutoSuggest(forms.TextInput):
         empty_text = self.attrs.get('empty_text') or _("No Results")
         prompt_text = self.attrs.get('prompt_text') or _("Enter a tag")
         limit_text = self.attrs.get('limit_text') or _('No More Selections Are Allowed')
-        field_width = self.attrs.get('field_width')
+        # In case there is no field_width, use the global setting TAGGIT_AUTOSUGGEST_SELECT2_WIDTH
+        field_width = self.attrs.get('field_width') or WIDTH
+
 
         self.extra_settings.update(EXTRA_SETTINGS)
 
@@ -63,8 +66,15 @@ class TagAutoSuggest(forms.TextInput):
 
     class Media:
         if LOAD_SELECT2:
-            js_base_url = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL', '%s' % settings.STATIC_URL)
-            select2_css_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_CSS_URL','%scss/select2.css' % js_base_url)
-            select2_js_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_JS_URL','%sjs/select2.min.js' % js_base_url)
+            js_base_url = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_STATIC_BASE_URL', 
+            '%staggit_autosuggest_select2/' % settings.STATIC_URL)
+            select2_css_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_CSS_URL',
+                '%sselect2/select2.css' % js_base_url)
+            select2_js_url = getattr(settings,'TAGGIT_AUTOSUGGEST_SELECT2_JS_URL',
+                '%sselect2/select2.min.js' % js_base_url)
             css = {'all': (select2_css_url,)}
-            js = (select2_js_url,)
+            js = [
+                "%sjs/jquery-prepare.js" % js_base_url,
+                select2_js_url, 
+                "%sjs/jquery-preserve.js" % js_base_url
+            ]

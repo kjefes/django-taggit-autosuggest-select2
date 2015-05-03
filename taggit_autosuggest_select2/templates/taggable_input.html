@@ -1,5 +1,5 @@
 <script type="text/javascript">
- var startSelect2 = function ($){
+var startSelect2 = function ($){
    $(function(){
      var tagsAsString;
 
@@ -14,7 +14,7 @@
          tags: allTags,
          placeholder: '{{ start_text }}',
          width: '{{ field_width }}',
-         minimumInputLength: 1,
+         minimumInputLength: 3,
          initSelection: function (element, callback) {
            // Loads the tags from the hidden input field
            var data = [];
@@ -47,7 +47,7 @@
              var matched = $(data).filter(function() {
                var hasName = this.name !== undefined,
                tag = hasName ? this.name : this.text;
-               tag = tag.toLowerCase()
+               tag = tag.toLowerCase();
                return tag.localeCompare(term.toLowerCase()) === 0;
              });
              if (matched.length === 0) {
@@ -59,7 +59,7 @@
            else {
              var selected = $('#{{ widget_id }}').select2('val');
              var matched = $(selected).filter(function () {
-               var tag = this.toLowerCase()
+               var tag = this.toLowerCase();
                return tag.localeCompare(term.toLowerCase()) === 0;
              });
              if (matched.length === 0)
@@ -92,9 +92,9 @@
  };
 
  if ( typeof define === "function" && define.amd ) {
-   require(["jquery"], function ($) { startSelect2($)} );
+   require(["jquery"], function ($) { startSelect2(taggit_autosuggest.jQuery)} );
  }else{
-   startSelect2($);
+   startSelect2(taggit_autosuggest.jQuery);
  }
 
 </script>
