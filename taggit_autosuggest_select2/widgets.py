@@ -20,7 +20,7 @@ WIDTH = getattr(settings, 'TAGGIT_AUTOSUGGEST_SELECT2_WIDTH', '60em')
 class TagAutoSuggest(forms.TextInput):
     input_type = 'text'
     extra_settings = {}
-    url = reverse_lazy('taggit_autosuggest_select2-list-all')
+    url = reverse_lazy('taggit_autosuggest_select2-list')
 
     def render(self, name, value, attrs=None):
         if value is not None and not isinstance(value, basestring):
