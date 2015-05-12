@@ -15,6 +15,24 @@ var startSelect2 = function ($){
          placeholder: '{{ start_text }}',
          width: '{{ field_width }}',
          minimumInputLength: 3,
+         ajax: {
+           url: '{{ url }}',
+           dataType: 'json',
+           quietMillis: 500,
+           data: function (term, page) {
+             return {
+                    q: term,
+                    limit: {{ retrieve_limit }}
+                    };
+           },
+           results: function (data, page) {
+               var items = []
+               $.each(data, function (index, value) {
+                   items.push({id: value.name, text: value.name});
+               });
+               return {results: items};
+           }
+         },
          initSelection: function (element, callback) {
            // Loads the tags from the hidden input field
            var data = [];
