@@ -23,7 +23,7 @@ class TagAutoSuggest(forms.TextInput):
     url = reverse_lazy('taggit_autosuggest_select2-list')
 
     def render(self, name, value, attrs=None):
-        if value is not None and not isinstance(value, basestring):
+        if value is not None and not isinstance(value, str):
             tags = [o.tag for o in value.select_related("tag")]
             value = edit_string_for_tags(tags)
 
